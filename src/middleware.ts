@@ -4,7 +4,7 @@ import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 import { json } from 'stream/consumers';
 
-const protectedRoutes = ['/dashboard', '/profile'] // Rute yang perlu proteksi
+const protectedRoutes = ['/', '/profile'] // Rute yang perlu proteksi
 const authRoutes = ['/signin', '/signup'] // Rute autentikasi
 
 export default async function middleware(request: NextRequest) {
@@ -12,10 +12,10 @@ export default async function middleware(request: NextRequest) {
   const accessToken = request.cookies.get('token')?.value
   console.log('Access Token:', accessToken?.length);
   // Jika mencoba akses rute protected tanpa token
-  if (protectedRoutes.some(route => pathname.startsWith(route))) {
+  if (protectedRoutes.includes(pathname)) {
     if (!accessToken) {
       const signinUrl = new URL('/signin', request.url)
-      signinUrl.searchParams.set('redirect', pathname)
+    //   signinUrl.searchParams.set('redirect', pathname)
       return NextResponse.redirect(signinUrl)
     }
 
