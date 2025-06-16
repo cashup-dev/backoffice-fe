@@ -18,7 +18,7 @@ import {
   UserCircleIcon,
 } from "../icons/index";
 import SidebarWidget from "./SidebarWidget";
-import { Percent, Store, CreditCard } from 'lucide-react';
+import { Percent, Store, CreditCard, TicketCheck } from 'lucide-react';
 
 
 type NavItem = {
@@ -77,6 +77,11 @@ const navItems: NavItem[] = [
     name: "BIN Binding",
     icon: <CreditCard />,
     path: "/bin-management",
+  },
+  {
+    name: "Eligibility Management",
+    icon:<TicketCheck />,
+    path: "/eligibility-management",
   }
 ];
 
