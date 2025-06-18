@@ -66,7 +66,7 @@ export default function BinBindingForm({ promoId, onSuccess }: Props) {
       setIsSubmitting(true);
   
       const payload = {
-        binIds: selected // Pastikan sesuai dengan yang diharapkan backend
+        binNumbers: selected // Pastikan sesuai dengan yang diharapkan backend
       };
   
       // Gunakan route Next.js yang sudah dibuat
