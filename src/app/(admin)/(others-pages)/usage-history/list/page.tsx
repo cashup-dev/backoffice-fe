@@ -1,27 +1,27 @@
 "use client";
 import { useEffect, useState } from "react";
-import EligibilityTable from "@/components/eligibility-management/EligibilityTable";
-import Button from "@/components/ui/button/Button";
+import UsageHistoryTable from "@/components/usage-history/UsageHistoryManagement";
 import { toast } from "sonner";
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
-export default function EligibilityManagementPage() {
-  const [data, setData] = useState([]);
+import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from "lucide-react";
+import NoData from "@/components/bin-management/NoData";
+
+export default function UsageHistoryPage() {
+  const [data, setData] = useState<any[]>([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(0);
   const [totalPages, setTotalPages] = useState(0);
-  const [pageSize, setPageSize] = useState(15); // Default 15 data per page
+  const [pageSize, setPageSize] = useState(15);
   const [totalItems, setTotalItems] = useState(0);
 
-  const fetchEligibility = async (page: number = currentPage) => {
+  const fetchUsageHistory = async (page: number = currentPage) => {
     setLoading(true);
     try {
-      const res = await fetch("/api/eligibility/list", {
+      const res = await fetch("/api/usage-history/list", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ 
           page: page, 
-          pageSize: pageSize,
-          // Tambahkan filter lain jika perlu
+          pageSize: pageSize
         }),
       });
   
@@ -29,7 +29,6 @@ export default function EligibilityManagementPage() {
       if (!res.ok) throw new Error(json.message);
   
       setData(json.data.data.content || []);
-      // Asumsi BE mengembalikan totalPages dan totalElements
       setTotalPages(json.data.data.totalPages || 0);
       setTotalItems(json.data.data.totalElements || 0);
     } catch (err: any) {
@@ -42,45 +41,32 @@ export default function EligibilityManagementPage() {
   const handlePageChange = (newPage: number) => {
     if (newPage >= 0 && newPage < totalPages) {
       setCurrentPage(newPage);
-      fetchEligibility(newPage);
+      fetchUsageHistory(newPage);
     }
   };
 
   const handlePageSizeChange = (size: number) => {
     setPageSize(size);
-    setCurrentPage(0); // Reset ke page pertama ketika ganti page size
-    fetchEligibility(0); // Fetch dengan pageSize baru
+    setCurrentPage(0);
+    fetchUsageHistory(0);
   };
 
-    const handleUpload = () => {
-    const input = document.createElement("input");
-    input.type = "file";
-    input.accept = ".csv,.txt";
-    input.onchange = async (e: any) => {
-      const file = e.target.files?.[0];
-      if (file) {
-        await uploadCSV(file);
-        fetchEligibility(); // refresh list
-      }
-    };
-    input.click();
-  };
   useEffect(() => {
-    fetchEligibility();
+    fetchUsageHistory();
   }, []);
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-xl font-bold">Eligibility Management</h1>
-        <Button onClick={handleUpload}>📤 Upload Eligibility CSV</Button>
-      </div>
+      <h1 className="text-xl font-bold">Riwayat Penggunaan Promo</h1>
       
-      {loading ? (
-        <p>Loading...</p>
+      {
+      loading ? (
+        <div className="flex justify-center items-center h-64">
+          <p>Memuat data...</p>
+        </div>
       ) : (
         <>
-          <EligibilityTable data={data} />
+          <UsageHistoryTable data={data} />
           
           {/* Pagination Controls */}
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
@@ -89,18 +75,6 @@ export default function EligibilityManagementPage() {
             </div>
             
             <div className="flex items-center gap-2">
-              {/* <select
-                value={pageSize}
-                onChange={(e) => handlePageSizeChange(Number(e.target.value))}
-                className="border rounded px-2 py-1 text-sm"
-              >
-                {[10, 15, 20, 30, 50].map(size => (
-                  <option key={size} value={size}>
-                    {size} per halaman
-                  </option>
-                ))}
-              </select> */}
-              
               <button
                 onClick={() => handlePageChange(0)}
                 disabled={currentPage === 0}
@@ -139,11 +113,8 @@ export default function EligibilityManagementPage() {
             </div>
           </div>
         </>
-      )}
+      )
+      }
     </div>
   );
-}
-
-function uploadCSV(file: any) {
-  throw new Error("Function not implemented.");
 }

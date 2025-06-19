@@ -64,10 +64,18 @@ const navItems: NavItem[] = [
   //   ],
   // },
   {
-    name: "Promo Management",
     icon: <Percent />,
-    path: "/promo-management",
+    name: "Promo Management",
+    subItems: [
+      { name: "List", path: "/promo-management", pro: false },
+      { name: "Usage History", path: "/usage-history/list", pro: false },
+    ],
   },
+  // {
+  //   name: "Promo Management",
+  //   icon: <Percent />,
+  //   path: "/promo-management",
+  // },
   {
     name: "Merchant",
     icon: <Store />,
