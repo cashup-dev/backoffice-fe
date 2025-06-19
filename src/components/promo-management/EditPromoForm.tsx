@@ -31,7 +31,23 @@ export default function EditPromoForm({ promoData, onSuccess }: EditPromoFormPro
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-
+  
+    // Client-side validation
+    if (!promoValue && promoValue !== 0) {
+      toast.error("❌ Nilai Promo wajib diisi");
+      return;
+    }
+  
+    if (!maxSubsidy && maxSubsidy !== 0) {
+      toast.error("❌ Subsidi Maksimal wajib diisi");
+      return;
+    }
+  
+    if (!validTo) {
+      toast.error("❌ Tanggal Berlaku wajib diisi");
+      return;
+    }
+  
     if (
       promoValue === promoData.promoValue &&
       maxSubsidy === promoData.maxSubsidy &&
@@ -40,12 +56,12 @@ export default function EditPromoForm({ promoData, onSuccess }: EditPromoFormPro
       toast.warning("⚠️ Tidak ada perubahan data untuk disimpan.");
       return;
     }
-
+  
     const token = document.cookie
       .split("; ")
       .find((row) => row.startsWith("token="))
       ?.split("=")[1];
-
+  
     try {
       setIsSubmitting(true);
       const res = await fetch(`/api/promo/edit/${promoData.id}`, {
@@ -60,15 +76,15 @@ export default function EditPromoForm({ promoData, onSuccess }: EditPromoFormPro
           validTo,
         }),
       });
-
+  
       const data = await res.json();
-
+  
       if (!res.ok) throw new Error(data.message || "Failed to update");
-
+  
       toast.success("✅ Promo berhasil diubah!", {
         description: "Data berhasil disimpan.",
       });
-
+  
       onSuccess?.();
     } catch (err: any) {
       toast.error("❌ Gagal update promo", {
@@ -78,6 +94,7 @@ export default function EditPromoForm({ promoData, onSuccess }: EditPromoFormPro
       setIsSubmitting(false);
     }
   };
+  
 
   return (
     <ComponentCard title="Edit Promo">
