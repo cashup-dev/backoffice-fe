@@ -1,4 +1,3 @@
-// src/app/api/promo/activate/[id]/route.ts
 import { NextResponse } from "next/server";
 import { apiServer } from "../../../../../../lib/apiServer";
 
@@ -8,18 +7,9 @@ export async function POST(
 ) {
   try {
     const resolvedParams = await params;
-    // Debugging: Log semua headers yang masuk
-    const headers = {
-      authorization: request.headers.get("Authorization"),
-      cookie: request.headers.get("Cookie"),
-      contentType: request.headers.get("Content-Type")
-    };
-    console.log('📢 Request Headers:', headers);
-
     const { id } = resolvedParams;
     const { isActive } = await request.json();
 
-    // Cara lebih robust untuk ambil token
     let token: string | null = null;
     
     // Cek Authorization header dulu
@@ -27,7 +17,7 @@ export async function POST(
     if (authHeader?.startsWith("Bearer ")) {
       token = authHeader.split(" ")[1];
     } 
-    // Kalo ga ada, cek cookie
+    // Atau ambil dari cookie
     else {
       const cookieHeader = request.headers.get("Cookie");
       token = cookieHeader
@@ -36,7 +26,7 @@ export async function POST(
         ?.split("=")[1] || null;
     }
 
-    console.log('🔑 Extracted Token:', token); // Debug token
+    console.log('🔑 Extracted Token:', token); // Debug
 
     if (!token) {
       return NextResponse.json(
@@ -49,7 +39,6 @@ export async function POST(
       );
     }
 
-    // Forward request ke API utama
     const res = await apiServer.post(
       `/promo/activate/${id}`,
       { isActive },

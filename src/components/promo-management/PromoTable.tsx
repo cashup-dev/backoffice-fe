@@ -2,6 +2,8 @@
 import React, { useState } from "react";
 import { ChevronDownIcon, ArrowPathIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/navigation";
+import { toast } from "sonner";
+
 
 type Promo = {
   id: number;
@@ -106,46 +108,32 @@ export default function PromoTable({
   const handleStatusChange = async (promoId: number, isActive: boolean) => {
     setLoadingStatus(promoId);
     try {
-      await simulateLoading(); // Tambah delay biar loading keliatan
-      
-      const token = document.cookie
-        .split("; ")
-        .find((row) => row.startsWith("token="))
-        ?.split("=")[1];
-  
-      if (!token) {
-        throw new Error("Token not found");
-      }
-  
       const res = await fetch(`/api/promo/activate/${promoId}`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({ isActive }),
       });
   
-      const data = await res.json();
-      
       if (!res.ok) {
-        console.error("Error details:", data);
-        throw new Error(data.message || `Request failed with status ${res.status}`);
+        const errorData = await res.json();
+        throw new Error(errorData.message || "Gagal update status");
       }
   
       if (onStatusChange) {
         await onStatusChange(promoId, isActive);
       }
-      
-      alert(`Status promo berhasil diubah ke ${isActive ? 'active' : 'inactive'}`);
+  
+      toast.success(`Status promo berhasil diubah ke ${isActive ? "active" : "inactive"}`);
     } catch (err: any) {
-      console.error("Gagal update status:", err);
-      alert(`Error: ${err.message}\nCek console untuk detail`);
+      console.error("🔥 Full error:", err);
+      toast.error(`Gagal update status: ${err.message}`);
     } finally {
       setLoadingStatus(null);
     }
   };
-
+  
   return (
     <div className="overflow-auto border rounded-xl shadow-sm">
       <table className="w-full text-sm text-left text-gray-700">
