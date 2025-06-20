@@ -5,9 +5,9 @@ import { cookies } from 'next/headers';
 
 // const BASE_URL = 'https://promo-en.nephren.xyz';
 
-// const BASE_URL = 'https://sword-dopleganger.cashlez.com/';
+const BASE_URL = 'https://sword-dopleganger.cashlez.com/';
 
-const BASE_URL = process.env.PROMO_ENGINE_API;
+// const BASE_URL = process.env.PROMO_ENGINE_API;
 
 export const apiServer = axios.create({
   baseURL: BASE_URL,

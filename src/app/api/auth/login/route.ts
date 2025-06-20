@@ -7,11 +7,10 @@ export async function POST(req: NextRequest) {
   try {
     const res = await apiServer.post('/user/login', body);
     const token = res.data.data.token;
-    console.log('Token:', token);
     const response = NextResponse.json({ success: true });
 
     response.cookies.set('token', token, {
-      httpOnly: true,
+      httpOnly: false,
       secure: process.env.NODE_ENV === 'production',
       maxAge: 60 * 60 * 24,
       path: '/',
