@@ -1,5 +1,6 @@
 // lib/auth.ts (diubah)
 export interface UserData {
+  roles: any;
   id: number;
   username: string;
   role: string;

@@ -11,13 +11,21 @@ export default function UserDropdown() {
   const [user, setUser] = useState<{
     id: number;
     username: string;
-    role: string;
+    roles: Array<{ authority: string }>; // roles array
   } | null>(null);
 
   useEffect(() => {
     const fetchUser = async () => {
-      const userData = getCurrentUser();
-      setUser(await userData);
+      const userData = await getCurrentUser();
+      if (userData) {
+        setUser({
+          id: userData.id,
+          username: userData.username,
+          roles: userData.roles.map((role: { authority: any; }) => role.authority), // Convert roles to array of strings
+        });
+      } else {
+        setUser(null);
+      }
     };
     fetchUser();
   }, []);
@@ -86,8 +94,10 @@ export default function UserDropdown() {
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
             {user?.username || "Random User"}
           </span>
-          <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400">
-            orang ganteng
+          <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400 lowercase">
+            {typeof user?.roles?.[0] === "string"
+              ? user.roles[0]
+              : user?.roles?.[0]?.authority || "User Role"}
           </span>
         </div>
 
