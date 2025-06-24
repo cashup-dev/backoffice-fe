@@ -4,6 +4,7 @@ import ComponentCard from "@/components/common/ComponentCard";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
 import { toast } from "sonner";
+import DatePicker from "@/components/form/date-picker";
 
 type EditPromoFormProps = {
   promoData: {
@@ -122,15 +123,21 @@ export default function EditPromoForm({ promoData, onSuccess }: EditPromoFormPro
         </div>
 
         <div>
-          <Label>Valid To</Label>
-          <input
-            type="date"
-            value={validTo}
-            onChange={(e) => setValidTo(e.target.value)}
-            className="w-full border px-3 py-2 rounded"
-            disabled={isSubmitting}
-          />
+        <DatePicker
+          id="validToPicker"
+          label="Valid To"
+          defaultDate={validTo ? new Date(validTo) : undefined}
+          onChange={(selectedDates) => {
+            const selected = selectedDates[0];
+            if (selected instanceof Date && !isNaN(selected.getTime())) {
+              const formatted = selected.toISOString().split("T")[0]; // Format YYYY-MM-DD
+              setValidTo(formatted);
+            }
+          }}
+          minDate="today"
+        />
         </div>
+
 
         <div>
           <Button type="submit" className="w-full" disabled={isSubmitting}>

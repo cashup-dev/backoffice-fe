@@ -92,10 +92,11 @@ export default function BinManagementPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Gagal unbind BIN");
   
-            toast.success("✅ Unbind Berhasil", {
+            toast.success("", {
               description: `BIN ${binNumber} berhasil dihapus dari promo.`,
               id: toastId,
             });
+            
   
             setTimeout(() => {
               fetchBins();
@@ -109,7 +110,7 @@ export default function BinManagementPage() {
         },
       },
       duration: 10000,
-      dismissible: false,
+      dismissible: true,
     });
   }, []);
   

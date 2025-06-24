@@ -25,7 +25,7 @@ function BindMerchantCompoPageComponent() {
       <MerchantBindingForm
         promoId={parseInt(promoId)}
         onSuccess={() => {
-          toast.success("Merchant berhasil di-bind");
+          // toast.success("Merchant berhasil di-bind");
           router.push("/promo-management/list");
         }}
       />

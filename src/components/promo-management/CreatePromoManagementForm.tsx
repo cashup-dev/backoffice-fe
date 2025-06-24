@@ -120,7 +120,7 @@ export default function CreatePromoManagementForm() {
       if (!res.ok) throw new Error(data.message || "Gagal submit promo");
   
       toast.success("✅ Promo berhasil dibuat!", {
-        description: "Promo kamu telah disimpan ke dalam sistem.",
+        // description: "Promo kamu telah disimpan ke dalam sistem.",
       });
   
       setTimeout(() => {

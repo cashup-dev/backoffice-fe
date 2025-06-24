@@ -83,8 +83,8 @@ export default function MerchantManagementPage() {
             const data = await res.json();
             if (!res.ok) throw new Error(data.message || "Gagal unbind merchant");
 
-            toast.success("✅ Unbind Berhasil", {
-              description: `Merchant ${merchantName} berhasil dihapus dari promo.`,
+            toast.success("", {
+              description: `✅ Merchant ${merchantName} berhasil dihapus dari promo.`,
               id: toastId,
             });
 
@@ -100,7 +100,7 @@ export default function MerchantManagementPage() {
         },
       },
       duration: 10000,
-      dismissible: false,
+      dismissible: true,
     });
   }, []);
 
