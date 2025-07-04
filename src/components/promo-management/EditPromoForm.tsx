@@ -14,6 +14,7 @@ type EditPromoFormProps = {
     finalPromoAmount: number;
     usagePerDay: number;
     validTo: string;
+    promoType: string;
   };
   onSuccess?: () => void;
 };
@@ -24,6 +25,7 @@ export default function EditPromoForm({ promoData, onSuccess }: EditPromoFormPro
   const [finalPromoAmount, setFinalPromoAmount] = useState(0);
   const [usagePerDay, setUsagePerDay] = useState(0);
   const [validTo, setValidTo] = useState("");
+  const [promoType, setPromoType] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   useEffect(() => {
@@ -33,6 +35,7 @@ export default function EditPromoForm({ promoData, onSuccess }: EditPromoFormPro
       setFinalPromoAmount(promoData.finalPromoAmount || 0);
       setUsagePerDay(promoData.usagePerDay || 0);
       setValidTo(promoData.validTo || "");
+      setPromoType(promoData.promoType || "");
     }
   }, [promoData]);
 
@@ -122,16 +125,18 @@ export default function EditPromoForm({ promoData, onSuccess }: EditPromoFormPro
   return (
     <ComponentCard title="Edit Promo">
       <form onSubmit={handleSubmit} className="space-y-6">
-        <div>
-          <Label>Promo Value</Label>
-          <input
-            type="number"
-            value={promoValue}
-            onChange={(e) => setPromoValue(parseFloat(e.target.value))}
-            className="w-full border px-3 py-2 rounded"
-            disabled={isSubmitting}
-          />
-        </div>
+        {(promoType !== 'FIXED') && // TODO: this might be a temporary solution, need to adjust the edit form field to be more dynamic on future
+          <div>
+            <Label>Promo Value</Label>
+            <input
+              type="number"
+              value={promoValue}
+              onChange={(e) => setPromoValue(parseFloat(e.target.value))}
+              className="w-full border px-3 py-2 rounded"
+              disabled={isSubmitting}
+            />
+          </div>
+        }
 
         <div>
           <Label>Max Subsidy</Label>

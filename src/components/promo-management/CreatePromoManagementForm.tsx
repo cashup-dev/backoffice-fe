@@ -23,7 +23,7 @@ export default function CreatePromoManagementForm() {
     maxTransaction: 0,
     maxSubsidy: 0,
     finalPromoAmount: 0,
-    channelType: "",
+    channelType: "CARD",
     validFrom: "",
     validTo: "",
   });
