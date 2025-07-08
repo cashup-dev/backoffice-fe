@@ -75,7 +75,7 @@ export default function CreatePromoManagementForm() {
     if (!formData.usagePerDay) errors.usagePerDay = "Usage per day is required";
     if (!formData.minTransaction && formData.minTransaction != 0 ) errors.minTransaction = "Min transaction is required";
     if (!formData.maxTransaction && formData.maxTransaction != 0) errors.maxTransaction = "Max transaction is required";
-    if (!formData.maxSubsidy) errors.maxSubsidy = "Max subsidy is required";
+    if (!formData.maxSubsidy && formData.maxSubsidy != 0) errors.maxSubsidy = "Max subsidy is required";
     if (!formData.finalPromoAmount && formData.finalPromoAmount != 0) errors.finalPromoAmount = "Final promo amount is required";
     if (!formData.channelType) errors.channelType = "Channel type is required";
     if (!formData.validFrom) errors.validFrom = "Valid from date is required";
