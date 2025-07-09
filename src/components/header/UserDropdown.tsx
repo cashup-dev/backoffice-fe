@@ -9,6 +9,7 @@ export default function UserDropdown() {
   const [user, setUser] = useState<{
     id: number;
     username: string;
+    partnerName?: string;
     roles: Array<{ authority: string }>; // roles array
   } | null>(null);
 
@@ -21,7 +22,8 @@ export default function UserDropdown() {
           username: userData.username,
           roles: userData.roles.map(
             (role: { authority: any }) => role.authority
-          ), // Convert roles to array of strings
+          ),
+          partnerName: userData.partnerName,
         });
       } else {
         setUser(null);
@@ -96,10 +98,17 @@ export default function UserDropdown() {
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
             {user?.username || "Random User"}
           </span>
-          <span className="mt-0.5 block text-theme-xs text-gray-500 dark:text-gray-400 lowercase">
-            {typeof user?.roles?.[0] === "string"
+          <span className="mt-0.5  text-theme-xs text-gray-500 dark:text-gray-400 flex ">
+            <p className="lowercase">
+              {typeof user?.roles?.[0] === "string"
               ? user.roles[0]
               : user?.roles?.[0]?.authority || "User Role"}
+            </p>
+            <span className="mx-1">|</span>
+            <p>
+              {user?.partnerName ? `${user.partnerName}` : ""}
+            </p>
+            
           </span>
         </div>
 
