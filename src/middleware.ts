@@ -1,15 +1,21 @@
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
 
-const protectedRoutes = ['/', '/profile'] // Rute yang perlu proteksi
+const protectedRoutes = [
+  '/profile',
+  '/bin-management',
+  '/eligibility-management',
+  '/merchant-management',
+  '/promo-management',
+  '/usage-history'
+] // Rute yang perlu proteksi
 const authRoutes = ['/signin', '/signup'] // Rute autentikasi
 
 export default async function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl
   const accessToken = request.cookies.get('token')?.value
-  console.log('Access Token:', accessToken?.length);
-  // Jika mencoba akses rute protected tanpa token
-  if (protectedRoutes.includes(pathname)) {
+
+  if (pathname === '/' || protectedRoutes.some((route) => pathname.startsWith(route))) {
     if (!accessToken) {
       const signinUrl = new URL('/signin', request.url)
     //   signinUrl.searchParams.set('redirect', pathname)
@@ -42,9 +48,19 @@ export default async function middleware(request: NextRequest) {
 export const config = {
   matcher: [
     '/',
-    '/profile/:path*',
     '/signin',
     '/signup',
-    '/forgot-password',
+    '/profile',
+    '/bin-management',
+    '/eligibility-management',
+    '/merchant-management',
+    '/promo-management',
+    '/usage-history',
+    '/profile/:path*',
+    '/bin-management/:path*',
+    '/eligibility-management/:path*',
+    '/merchant-management/:path*',
+    '/promo-management/:path*',
+    '/usage-history/:path*'
   ],
 }
