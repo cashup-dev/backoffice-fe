@@ -1,6 +1,6 @@
 "use client";
 import React from "react";
-import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export type Merchant = {
   id: number;
@@ -27,6 +27,7 @@ function formatDate(dateStr?: string) {
 }
 
 export default function MerchantTable({ data, onMerchantUnBind }: Props) {
+  const {isAdmin} = useAuth();
   return (
     <div className="overflow-auto border rounded-xl shadow-sm">
       <table className="w-full text-sm text-left text-gray-700">
@@ -35,7 +36,9 @@ export default function MerchantTable({ data, onMerchantUnBind }: Props) {
             <th className="px-4 py-3">Merchant Name</th>
             <th className="px-4 py-3">Promo Name</th>
             <th className="px-4 py-3">Created At</th>
-            <th className="px-4 py-3 text-center">Action</th>
+            {isAdmin && (
+              <th className="px-4 py-3 text-center">Action</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -53,6 +56,7 @@ export default function MerchantTable({ data, onMerchantUnBind }: Props) {
                   <td className="px-4 py-3">{merchantName}</td>
                   <td className="px-4 py-3">{promoName}</td>
                   <td className="px-4 py-3">{formatDate(createdAt)}</td>
+                  {isAdmin && (
                   <td className="px-4 py-3 text-center">
                     <button
                       className="text-sm font-medium text-red-600 hover:text-red-800 px-4 py-2 border border-red-500 rounded-md"
@@ -61,6 +65,7 @@ export default function MerchantTable({ data, onMerchantUnBind }: Props) {
                       Unbind Merchant
                     </button>
                   </td>
+                  )}
                 </tr>
               );
             })

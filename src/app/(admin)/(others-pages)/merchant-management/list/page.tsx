@@ -1,6 +1,5 @@
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
-import { useRouter } from "next/navigation";
 import MerchantTable, { Merchant } from "@/components/merchant-management/MerchantTable";
 import NoData from "@/components/merchant-management/NoData";
 import { toast } from "sonner";
@@ -9,7 +8,6 @@ export default function MerchantManagementPage() {
   const [merchantList, setMerchantList] = useState<Merchant[]>([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
-  const router = useRouter();
 
   const fetchMerchants = async () => {
     setLoading(true);
