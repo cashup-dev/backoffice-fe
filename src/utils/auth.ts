@@ -1,28 +1,16 @@
-// lib/auth.ts (diubah)
-export interface UserData {
-  roles: any;
-  id: number;
-  username: string;
-  role: string;
-  partnerId?: number;
-  partnerName?: string;
-}
+import { TokenPayload, UserData } from "@/types/auth";
+import { jwtDecode } from "jwt-decode";
 
-// Fungsi ini sekarang jadi async karena akan melakukan fetch
 export const getCurrentUser = async (): Promise<UserData | null> => {
-  // Client-side onlyi
   if (typeof window === 'undefined') {
     return null;
   }
   
   try {
-    // Panggil API endpoint /api/auth/me
-    // Browser akan OTOMATIS menyertakan httpOnly cookie 'token'
     const response = await fetch('/api/auth/me');
     const responseData = await response.json();
-    // console.log(responseData);
+
     if (!response.ok) {
-      // Kalau statusnya 401 atau error lain, berarti user tidak valid
       console.log('Failed to fetch user data, user likely not logged in.');
       return null;
     }
@@ -34,3 +22,23 @@ export const getCurrentUser = async (): Promise<UserData | null> => {
     return null;
   }
 };
+
+export const getUserDataFromToken = (token: string): UserData | null => {
+  try {
+    const decodedToken = jwtDecode<TokenPayload>(token);
+
+    const user: UserData = {
+      id: decodedToken.id,
+      username: decodedToken.sub,
+      roles: decodedToken.roles,
+      partnerId: decodedToken.partnerId, 
+      partnerName:  decodedToken.partnerName
+    };
+
+    return user;
+
+  } catch (error) {
+    console.error('Error decoding token:', error);
+    return null;
+  }
+}

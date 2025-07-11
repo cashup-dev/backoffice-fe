@@ -1,24 +1,7 @@
-import { jwtDecode } from 'jwt-decode'
 import { NextResponse } from 'next/server'
 import type { NextRequest } from 'next/server'
-
-interface TokenPayload {
-  sub: string;    // username
-  id: number;     // user ID
-  roles: Array<{ authority: string }>;  // roles array
-  iat: number;    // issued at
-  exp: number;    // expiration time
-  partnerId?: number;
-  partnerName?: string;
-}
-
-export interface UserData {
-  id: number;
-  username: string;
-  roles: Array<{ authority: string }>;
-  partnerId?: number;
-  partnerName?: string; 
-}
+import { UserData } from './types/auth'
+import { getUserDataFromToken } from './utils/auth'
 
 const protectedRoutes = [
   '/profile',
@@ -53,24 +36,15 @@ export default async function middleware(request: NextRequest) {
               { status: 401 }
             );
           }
-          const decodedToken = jwtDecode<TokenPayload>(accessToken);
 
-          const currentTime = Math.floor(Date.now() / 1000);
-          if (decodedToken.exp < currentTime) {
-            request.cookies.delete('token');
+          const user: UserData | null = getUserDataFromToken(accessToken);
+
+          if (!user) {
             return NextResponse.json(
-              { message: 'Token has expired.' },
+              { message: 'Invalid or malformed token.' },
               { status: 401 }
             );
           }
-
-          const user: UserData = {
-            id: decodedToken.id,
-            username: decodedToken.sub,
-            roles: decodedToken.roles,  // Assign roles as array of objects with authority property
-            partnerId: decodedToken.partnerId, 
-            partnerName:  decodedToken.partnerName// Optional, if you want to include it
-          };
 
           if (adminOnlyRoutes.includes(pathname) && !user.roles.some(role => role.authority === 'ADMIN')) {
             return NextResponse.json(
@@ -88,7 +62,6 @@ export default async function middleware(request: NextRequest) {
     }
   }
 
-  // Jika sudah signin tapi mencoba akses rute auth
   if (authRoutes.includes(pathname) && accessToken) {
     return NextResponse.redirect(new URL('/', request.url))
   }

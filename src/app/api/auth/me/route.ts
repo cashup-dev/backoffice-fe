@@ -1,34 +1,14 @@
 import { NextResponse } from 'next/server';
 import { cookies } from 'next/headers';
-import { jwtDecode } from 'jwt-decode';
-
-interface TokenPayload {
-  sub: string;    // username
-  id: number;     // user ID
-  roles: Array<{ authority: string }>;  // roles array
-  iat: number;    // issued at
-  exp: number;    // expiration time
-  partnerId?: number;
-  partnerName?: string;
-}
-
-export interface UserData {
-  id: number;
-  username: string;
-  roles: Array<{ authority: string }>;
-  partnerId?: number;
-  partnerName?: string; 
-}
+import { UserData } from '@/types/auth';
+import { getUserDataFromToken } from '@/utils/auth';
 
 export async function GET() {
   try {
-    // 1. Get cookie store
     const cookieStore = cookies();
 
-    // 2. Find token cookie
     const tokenCookie = (await cookieStore).get('token');
     
-    // 3. If no token found
     if (!tokenCookie) {
       return NextResponse.json(
         { message: 'Authentication token not found.' },
@@ -38,32 +18,15 @@ export async function GET() {
 
     const token = tokenCookie.value;
 
-    // 4. Decode the token
-    const decodedToken = jwtDecode<TokenPayload>(token);
-    // console.log('Decoded Token', decodedToken);
+    const user: UserData | null = getUserDataFromToken(token);
 
-    // 5. Check if token is expired
-    const currentTime = Math.floor(Date.now() / 1000);
-    if (decodedToken.exp < currentTime) {
-      (await cookieStore).delete('token');
+    if (!user) {
       return NextResponse.json(
-        { message: 'Token has expired.' },
+        { message: 'Invalid or malformed token.' },
         { status: 401 }
       );
     }
 
-    // 6. Prepare user data to send to client
-    const user: UserData = {
-      id: decodedToken.id,
-      username: decodedToken.sub,
-      roles: decodedToken.roles,  // Assign roles as array of objects with authority property
-      partnerId: decodedToken.partnerId, 
-      partnerName:  decodedToken.partnerName// Optional, if you want to include it
-    };
-
-    // console.log('User Data:', user);
-
-    // 7. Return user data
     return NextResponse.json({ user });
 
   } catch (error) {
