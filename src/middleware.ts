@@ -30,13 +30,6 @@ export default async function middleware(request: NextRequest) {
     }
 
     try {
-          if (!accessToken) {
-            return NextResponse.json(
-              { message: 'Authentication token not found.' },
-              { status: 401 }
-            );
-          }
-
           const user: UserData | null = getUserDataFromToken(accessToken);
 
           if (!user) {
@@ -47,10 +40,7 @@ export default async function middleware(request: NextRequest) {
           }
 
           if (adminOnlyRoutes.includes(pathname) && !user.roles.some(role => role.authority === 'ADMIN')) {
-            return NextResponse.json(
-              { message: 'Access denied. Admins only.' },
-              { status: 403 }
-            );
+            return NextResponse.redirect(new URL('/error-403', request.url));
           }
       
     } catch (err) {
