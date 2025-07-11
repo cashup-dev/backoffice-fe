@@ -22,7 +22,6 @@ export default function Error403() {
         <Image
           src="/images/error/403.svg"
           alt="403"
-          className="hidden"
           width={360}
           height={100}
         />

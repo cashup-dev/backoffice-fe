@@ -16,6 +16,7 @@ const adminOnlyRoutes = [
   '/promo-management/merchant-bind',
   '/promo-management/bin-bind',
   '/promo-management/edit',
+  '/promo-management/create',
 ]
 const authRoutes = ['/signin', '/signup']
 
