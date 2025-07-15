@@ -112,21 +112,20 @@ export default function TopMerchants() {
             <TableRow>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 pl-5 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400">
+                Ranking
+              </TableCell>
+              <TableCell
+                isHeader
+                className="py-3 pl-10 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
               >
                 Merchant Name
               </TableCell>
               <TableCell
                 isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
+                className="py-3 font-medium text-gray-500 text-end text-theme-xs dark:text-gray-400 pr-10"
               >
                 Transaction Count
-              </TableCell>
-              <TableCell
-                isHeader
-                className="py-3 font-medium text-gray-500 text-start text-theme-xs dark:text-gray-400"
-              >
-                Status
               </TableCell>
             </TableRow>
           </TableHeader>
@@ -135,25 +134,18 @@ export default function TopMerchants() {
           <TableBody className="divide-y divide-gray-100 dark:divide-gray-800">
             {merchants.map((merchant, index) => (
               <TableRow key={merchant.merchantId}>
-                <TableCell className="py-[1.11rem] font-medium text-gray-800 text-theme-sm dark:text-white/90">
-                  {merchant.merchantName}
-                </TableCell>
-                <TableCell className="py-[1.11rem] text-gray-500 text-theme-sm dark:text-gray-400">
-                  {merchant.count.toLocaleString()}
-                </TableCell>
-                <TableCell className="py-[1.11rem]">
+                <TableCell className="py-[1.11rem] pl-5">
                   <Badge
                     size="sm"
-                    color={
-                      index < 2 
-                        ? "success" 
-                        : index < 4 
-                          ? "warning" 
-                          : "error"
-                    }
                   >
-                    {index < 2 ? "Top" : index < 4 ? "Medium" : "Low"}
+                    #{index + 1}
                   </Badge>
+                </TableCell>
+                <TableCell className="py-[1.11rem] pl-10 font-medium text-gray-800 text-theme-sm dark:text-white/90">
+                  {merchant.merchantName}
+                </TableCell>
+                <TableCell className="py-[1.11rem] text-gray-500 text-theme-sm dark:text-gray-400 text-end pr-12">
+                  {merchant.count.toLocaleString()}
                 </TableCell>
               </TableRow>
             ))}

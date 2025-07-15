@@ -78,18 +78,18 @@ export const EcommerceMetrics = () => {
     );
   }
 
-  // Calculate percentage changes (mock data - replace with real calculations)
-  const activePromosChange = 5.2; // Example percentage
-  const successChange = Math.round((stats.successRate - 85) * 10) / 10; // Example calculation
-  const failureChange = -2.4; // Example percentage
-  const totalChange = 8.7; // Example percentage
+  // TODO: we may need to calculate changes for each metric
+  // const activePromosChange = 5.2; // Example percentage
+  // const successChange = Math.round((stats.successRate - 85) * 10) / 10; // Example calculation
+  // const failureChange = -2.4; // Example percentage
+  // const totalChange = 8.7; // Example percentage
 
   return (
     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:gap-6">
       {/* Active Promos Card */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <Tag className="text-gray-800 size-6 dark:text-white/90" />
+          <Tag className="text-amber-400 size-6 dark:text-white/90" />
         </div>
 
         <div className="flex items-end justify-between mt-5">
@@ -101,73 +101,57 @@ export const EcommerceMetrics = () => {
               {stats.totalActivePromos.toLocaleString()}
             </h4>
           </div>
-          <Badge color={activePromosChange >= 0 ? "success" : "error"}>
-            {activePromosChange >= 0 ? <ArrowUpIcon /> : <ArrowDownIcon />}
-            {Math.abs(activePromosChange)}%
-          </Badge>
         </div>
       </div>
 
       {/* Successful Transactions Card */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <CheckCircleIcon className="text-gray-800 size-6 dark:text-white/90" />
+          <CheckCircleIcon className="text-green-600 size-6 dark:text-white/90" />
         </div>
         <div className="flex items-end justify-between mt-5">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Successful Txns
+              Successful Transaction
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
               {stats.successfulTransactions.toLocaleString()}
             </h4>
           </div>
-          <Badge color={successChange >= 0 ? "success" : "error"}>
-            {successChange >= 0 ? <ArrowUpIcon /> : <ArrowDownIcon />}
-            {Math.abs(successChange)}%
-          </Badge>
         </div>
       </div>
 
       {/* Failed Transactions Card */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <X className="text-gray-800 size-6 dark:text-white/90" />
+          <X className="text-red-400 size-6 dark:text-white/90" />
         </div>
         <div className="flex items-end justify-between mt-5">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Failed Txns
+              Failed Transactions
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
               {stats.failedTransactions.toLocaleString()}
             </h4>
           </div>
-          <Badge color={failureChange >= 0 ? "success" : "error"}>
-            {failureChange >= 0 ? <ArrowUpIcon /> : <ArrowDownIcon />}
-            {Math.abs(failureChange)}%
-          </Badge>
         </div>
       </div>
 
       {/* Total Transactions Card */}
       <div className="rounded-2xl border border-gray-200 bg-white p-5 dark:border-gray-800 dark:bg-white/[0.03] md:p-6">
         <div className="flex items-center justify-center w-12 h-12 bg-gray-100 rounded-xl dark:bg-gray-800">
-          <Activity className="text-gray-800 size-6 dark:text-white/90" />
+          <Activity className="text-blue-800 size-6 dark:text-white/90" />
         </div>
         <div className="flex items-end justify-between mt-5">
           <div>
             <span className="text-sm text-gray-500 dark:text-gray-400">
-              Total Txns
+              Total Transactions
             </span>
             <h4 className="mt-2 font-bold text-gray-800 text-title-sm dark:text-white/90">
               {stats.totalTransactions.toLocaleString()}
             </h4>
           </div>
-          <Badge color={totalChange >= 0 ? "success" : "error"}>
-            {totalChange >= 0 ? <ArrowUpIcon /> : <ArrowDownIcon />}
-            {Math.abs(totalChange)}%
-          </Badge>
         </div>
       </div>
     </div>
