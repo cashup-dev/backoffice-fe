@@ -7,6 +7,6 @@ GlobalPipeline() {
   buildArgs = [
     JWT_SECRET : "burungkakaasdasdasdasdasdasdasdasdasdasdasdtua",
     NODE_ENV: "production",
-    PROMO_ENGINE_API: "http://192.168.7.48:8088/"
+    PROMO_ENGINE_API: "http://10.10.7.48:8088/"
   ]
 }
