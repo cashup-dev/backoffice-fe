@@ -6,8 +6,8 @@ import RecentOrders from "@/components/ecommerce/RecentOrders";
 
 export const metadata: Metadata = {
   title:
-    "Cashlez Promo",
-  description: "Cashlez Promo",
+    "cashUP Promo",
+  description: "cashUP Promo",
 };
 
 export default function Ecommerce() {

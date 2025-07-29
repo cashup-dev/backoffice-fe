@@ -29,10 +29,10 @@ export default function AuthLayout({
                     alt="Logo"
                   />
 
-                  <span className="text-blue-400 text-4xl font-semibold">Cashlez <span className="text-zinc-400">Promo Eng.</span></span>
+                  <span className="text-blue-400 text-4xl font-semibold">cash<span className="text-green-600">UP</span> <span className="text-zinc-400">Promo Eng.</span></span>
                 </Link>
                 <p className="text-center text-gray-400 dark:text-white/60">
-                  Cashlez Promo is a platform that helps you manage your promotions and campaigns effectively. 
+                  cashUP Promo is a platform that helps you manage your promotions and campaigns effectively. 
                 </p>
               </div>
             </div>

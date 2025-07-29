@@ -204,7 +204,7 @@ const AppSidebar: React.FC = () => {
                 width={32}
                 height={32}
               />
-              <span className="text-blue-400 text-2xl font-semibold">Cashlez <span className="text-zinc-400">Promo</span></span>
+              <span className="text-blue-400 text-2xl font-semibold">cashUP <span className="text-zinc-400">Promo</span></span>
             </div>
           ) : (
             <Image

@@ -100,7 +100,7 @@ const AppHeader: React.FC = () => {
               alt="Logo"
             />
             <span className="text-blue-400">
-              Cashlez <span className="text-zinc-400">Promo</span>
+              cashUP <span className="text-zinc-400">Promo</span>
             </span>
           </Link>
 
