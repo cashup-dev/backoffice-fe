@@ -3,7 +3,12 @@ import { useEffect, useState } from "react";
 import EligibilityTable from "@/components/eligibility-management/EligibilityTable";
 import Button from "@/components/ui/button/Button";
 import { toast } from "sonner";
-import { ChevronLeft, ChevronRight, ChevronsLeft, ChevronsRight } from 'lucide-react';
+import {
+  ChevronLeft,
+  ChevronRight,
+  ChevronsLeft,
+  ChevronsRight,
+} from "lucide-react";
 
 export default function EligibilityManagementPage() {
   const [data, setData] = useState<any[]>([]);
@@ -17,15 +22,15 @@ export default function EligibilityManagementPage() {
   // Fungsi untuk generate batchId
   const generateBatchId = () => {
     const now = new Date();
-    const pad = (num: number) => num.toString().padStart(2, '0');
+    const pad = (num: number) => num.toString().padStart(2, "0");
     return [
       pad(now.getDate()),
       pad(now.getMonth() + 1),
       now.getFullYear(),
       pad(now.getHours()),
       pad(now.getMinutes()),
-      pad(now.getSeconds())
-    ].join('');
+      pad(now.getSeconds()),
+    ].join("");
   };
 
   // Fungsi uploadCSV yang sudah diimplementasikan
@@ -34,18 +39,18 @@ export default function EligibilityManagementPage() {
     try {
       const batchId = generateBatchId();
       // console.log('Generated Batch ID:', batchId);
-      
+
       const formData = new FormData();
       formData.append("csvFile", file);
-      
+
       const response = await fetch(`/api/eligibility/upload/${batchId}`, {
         method: "POST",
         body: formData,
       });
-      
+
       const result = await response.json();
       if (!response.ok) throw new Error(result.message);
-      
+
       toast.success(`Upload berhasil! Batch ID: ${batchId}`);
       await fetchEligibility();
       return result;
@@ -65,10 +70,10 @@ export default function EligibilityManagementPage() {
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ page, pageSize }),
       });
-  
+
       const json = await res.json();
       if (!res.ok) throw new Error(json.message);
-  
+
       setData(json.data?.data?.content || []);
       setTotalPages(json.data?.data?.totalPages || 0);
       setTotalItems(json.data?.data?.totalElements || 0);
@@ -82,7 +87,7 @@ export default function EligibilityManagementPage() {
   const handleUpload = () => {
     const input = document.createElement("input");
     input.type = "file";
-    input.accept = ".csv,.txt";
+    input.accept = ".csv,.txt,.xlsx,.xls";
     input.onchange = async (e: any) => {
       const file = e.target.files?.[0];
       if (file) {
@@ -115,18 +120,18 @@ export default function EligibilityManagementPage() {
           {uploading ? "Mengupload..." : "📤 Upload Eligibility CSV"}
         </Button>
       </div>
-      
+
       {loading ? (
         <p>Loading...</p>
       ) : (
         <>
           <EligibilityTable data={data} />
-          
+
           <div className="flex flex-col sm:flex-row justify-between items-center gap-4 mt-4">
             <div className="text-sm text-gray-600">
               Menampilkan {data.length} dari {totalItems} data
             </div>
-            
+
             <div className="flex items-center gap-2">
               <button
                 onClick={() => handlePageChange(0)}
@@ -135,7 +140,7 @@ export default function EligibilityManagementPage() {
               >
                 <ChevronsLeft size={16} />
               </button>
-              
+
               <button
                 onClick={() => handlePageChange(currentPage - 1)}
                 disabled={currentPage === 0}
@@ -143,11 +148,11 @@ export default function EligibilityManagementPage() {
               >
                 <ChevronLeft size={16} />
               </button>
-              
+
               <span className="px-3 py-1">
                 Halaman {currentPage + 1} dari {totalPages}
               </span>
-              
+
               <button
                 onClick={() => handlePageChange(currentPage + 1)}
                 disabled={currentPage >= totalPages - 1}
@@ -155,7 +160,7 @@ export default function EligibilityManagementPage() {
               >
                 <ChevronRight size={16} />
               </button>
-              
+
               <button
                 onClick={() => handlePageChange(totalPages - 1)}
                 disabled={currentPage >= totalPages - 1}
