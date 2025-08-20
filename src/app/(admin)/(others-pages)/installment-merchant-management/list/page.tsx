@@ -69,7 +69,7 @@ export default function InstallmentMerchantManagementPage() {
               ?.split("=")[1];
             
             // TODO: Buat API route ini
-            const res = await fetch(`/api/installment-merchant-bind/unbind/${merchant.installmentId}`, {
+            const res = await fetch(`/api/installment-merchant/unbind/${merchant.installmentId}`, {
               method: "DELETE",
               headers: {
                 "Content-Type": "application/json",

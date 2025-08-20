@@ -34,6 +34,7 @@ const navItems: NavItem[] = [
       { name: "Usage History", path: "/usage-history/list", pro: false },
       { name: "Merchant", path: "/merchant-management", pro: false },
       { name: "BIN", path: "/bin-management", pro: false },
+      { name: "Eligibility Management", path: "/eligibility-management", pro: false },
     ],
   },
   {
@@ -46,12 +47,8 @@ const navItems: NavItem[] = [
       { name: "BIN", path: "/installment-bin-management", pro: false },
     ],
   },
-  {
-    name: "Eligibility Management",
-    icon: <TicketCheck />,
-    path: "/eligibility-management",
-  },
 ];
+
 
 
 

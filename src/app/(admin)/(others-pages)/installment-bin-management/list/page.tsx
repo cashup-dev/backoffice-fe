@@ -69,7 +69,7 @@ export default function InstallmentBinManagementPage() {
               ?.split("=")[1];
             
             // TODO: Buat API route ini
-            const res = await fetch(`/api/installment-bin-bind/unbind/${bin.installmentId}`, {
+            const res = await fetch(`/api/installment-bin/unbind/${bin.installmentId}`, {
               method: "DELETE",
               headers: {
                 "Content-Type": "application/json",
