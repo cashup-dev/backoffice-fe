@@ -4,10 +4,10 @@ import { apiServer } from "@/utils/apiServer";
 
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: { installmentId: string } }
+  { params }: { params: Promise<{ installmentId: string }> }
 ) {
   try {
-    const { installmentId } = params;
+    const { installmentId } =  await params;
     const token = (await cookies()).get("token")?.value;
 
     if (!token) {

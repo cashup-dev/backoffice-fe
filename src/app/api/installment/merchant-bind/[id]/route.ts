@@ -2,8 +2,8 @@ import { NextRequest, NextResponse } from "next/server";
 import { cookies } from "next/headers";
 import { apiServer } from "@/utils/apiServer";
 
-export async function POST(req: NextRequest, { params }: { params: { id: string } }) {
-  const installmentId = params.id;
+export async function POST(req: NextRequest, { params }: { params: Promise <{ id: string }> }) {
+  const installmentId = (await params).id;
   const body = await req.json();
 
   const token = (await cookies()).get("token")?.value;

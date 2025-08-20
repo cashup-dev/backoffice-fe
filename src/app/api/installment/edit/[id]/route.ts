@@ -3,9 +3,9 @@ import { apiServer } from '@/utils/apiServer'; // Menggunakan alias path '@' leb
 
 export async function PUT(
   req: NextRequest,
-  { params }: { params: { id: string } } // Tipe parameter yang benar untuk App Router
+  { params }: { params: Promise <{ id: string }> } // Tipe parameter yang benar untuk App Router
 ) {
-  const { id } = params; // Mengambil ID langsung dari params
+  const { id } = await params; // Mengambil ID langsung dari params
   const body = await req.json();
   
   // Mengambil token dari header permintaan yang datang dari frontend
