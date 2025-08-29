@@ -3,12 +3,14 @@ import React, { useEffect, useState } from "react";
 import PromoTable from "@/components/promo-management/PromoTable";
 import Button from "@/components/ui/button/Button";
 import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 export default function PromoManagementPage() {
   const [promoList, setPromoList] = useState([]);
   const [loading, setLoading] = useState(true);
   const [errorMsg, setErrorMsg] = useState("");
   const router = useRouter();
+  const { isAdmin } = useAuth();
 
   const fetchData = async () => {
     setLoading(true);
@@ -52,10 +54,12 @@ export default function PromoManagementPage() {
 
   return (
     <div className="space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-xl font-semibold">Promo Management</h1>
-        <Button onClick={handleCreate}>+ Create Promo</Button>
-      </div>
+      {isAdmin && (
+        <div className="flex justify-between items-center">
+          <h1 className="text-xl font-semibold">Promo Management</h1>
+          <Button onClick={handleCreate}>+ Create Promo</Button>
+        </div>
+      )}
 
       {loading ? (
         <p>Loading...</p>

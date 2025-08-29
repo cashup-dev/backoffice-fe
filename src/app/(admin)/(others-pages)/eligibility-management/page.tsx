@@ -9,6 +9,7 @@ import {
   ChevronsLeft,
   ChevronsRight,
 } from "lucide-react";
+import { useAuth } from "@/context/AuthContext";
 
 export default function EligibilityManagementPage() {
   const [data, setData] = useState<any[]>([]);
@@ -18,6 +19,7 @@ export default function EligibilityManagementPage() {
   const [pageSize] = useState(15);
   const [totalItems, setTotalItems] = useState(0);
   const [uploading, setUploading] = useState(false);
+  const { isAdmin } = useAuth();
 
   // Fungsi untuk generate batchId
   const generateBatchId = () => {
@@ -114,12 +116,14 @@ export default function EligibilityManagementPage() {
 
   return (
     <div className="p-6 space-y-6">
-      <div className="flex justify-between items-center">
-        <h1 className="text-xl font-bold">Eligibility Management</h1>
-        <Button onClick={handleUpload} disabled={uploading}>
-          {uploading ? "Mengupload..." : "📤 Upload Eligibility Data"}
-        </Button>
-      </div>
+      {isAdmin && (
+        <div className="flex justify-between items-center">
+          <h1 className="text-xl font-bold">Eligibility Management</h1>
+          <Button onClick={handleUpload} disabled={uploading}>
+            {uploading ? "Mengupload..." : "📤 Upload Eligibility Data"}
+          </Button>
+        </div>
+      )}
 
       {loading ? (
         <p>Loading...</p>

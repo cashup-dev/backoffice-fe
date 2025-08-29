@@ -1,6 +1,6 @@
 "use client";
+import { useAuth } from "@/context/AuthContext";
 import React from "react";
-import { useRouter } from "next/navigation";
 
 export type Bin = {
     id: number;
@@ -27,7 +27,7 @@ function formatDate(dateStr?: string) {
 }
 
 export default function BinTable({ data, onBinUnBinding }: Props) {
-  const router = useRouter();
+  const {isAdmin} = useAuth();
 
   return (
     <div className="overflow-auto border rounded-xl shadow-sm">
@@ -37,7 +37,9 @@ export default function BinTable({ data, onBinUnBinding }: Props) {
             <th className="px-4 py-3">BIN</th>
             <th className="px-4 py-3">Promo Name</th>
             <th className="px-4 py-3">Created At</th>
-            <th className="px-4 py-3 text-center">Action</th>
+            {isAdmin && (
+              <th className="px-4 py-3 text-center">Action</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -55,7 +57,8 @@ export default function BinTable({ data, onBinUnBinding }: Props) {
                   <td className="px-4 py-3">{binNumber}</td>
                   <td className="px-4 py-3">{promoName}</td>
                   <td className="px-4 py-3">{formatDate(createdAt)}</td>
-                  <td className="px-4 py-3 text-center">
+                  {isAdmin && (
+                    <td className="px-4 py-3 text-center">
                     <button
                       className="text-sm font-medium text-red-600 hover:text-red-800 px-4 py-2 border border-red-500 rounded-md"
                       onClick={() => onBinUnBinding?.(bin)}
@@ -63,6 +66,7 @@ export default function BinTable({ data, onBinUnBinding }: Props) {
                       Unbind BIN
                     </button>
                   </td>
+                  )}
                 </tr>
               );
             })

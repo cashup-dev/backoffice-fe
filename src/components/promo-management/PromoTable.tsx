@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import { ChevronDownIcon, ArrowPathIcon } from "@heroicons/react/20/solid";
 import { useRouter } from "next/navigation";
 import { toast } from "sonner";
+import { useAuth } from "@/context/AuthContext";
 
 
 type Promo = {
@@ -53,6 +54,7 @@ export default function PromoTable({
     action: string | null;
   }>({ id: null, action: null });
   const router = useRouter();
+  const { isAdmin } = useAuth();
 
   const toggleDropdown = (id: number) => {
     if (!loadingAction.id) { // Hanya boleh toggle kalo gak ada yang loading
@@ -153,7 +155,9 @@ export default function PromoTable({
             <th className="px-4 py-3">Valid From</th>
             <th className="px-4 py-3">Valid To</th>
             <th className="px-4 py-3">Status</th>
-            <th className="px-4 py-3 text-center">Actions</th>
+            {isAdmin && (
+              <th className="px-4 py-3 text-center">Actions</th>
+            )}
           </tr>
         </thead>
         <tbody>
@@ -215,7 +219,8 @@ export default function PromoTable({
                       {isActive ? 'Active' : 'Inactive'}
                     </span>
                   </td>
-                  <td className="px-4 py-3 text-center relative">
+                  {isAdmin && (
+                           <td className="px-4 py-3 text-center relative">
                     <div className="flex gap-2 justify-center">
                       <button
                         onClick={() => handleEdit(promo)}
@@ -289,6 +294,7 @@ export default function PromoTable({
                       </div>
                     </div>
                   </td>
+                  )}
                 </tr>
               );
             })

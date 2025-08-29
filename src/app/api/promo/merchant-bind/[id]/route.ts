@@ -1,6 +1,6 @@
 import { NextRequest } from "next/server";
 import { cookies } from "next/headers";
-import { apiServer } from "../../../../../../lib/apiServer";
+import { apiServer } from "../../../../../utils/apiServer";
 
 export async function POST(req: NextRequest, { params }: { params: Promise<{id: string}> }) {
   const promoId = (await params).id;

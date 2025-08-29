@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { apiServer } from '../../lib/apiServer'; // Adjust the path as needed
+import { apiServer } from '../utils/apiServer'; // Adjust the path as needed
 
 type User = {
   id: number;

@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { apiServer } from "../../../../../../lib/apiServer";
+import { apiServer } from "../../../../../utils/apiServer";
 
 export async function POST(
   request: Request,

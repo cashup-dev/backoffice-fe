@@ -5,12 +5,9 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import {
-  BoxCubeIcon,
   ChevronDownIcon,
   GridIcon,
   HorizontaLDots,
-  PieChartIcon,
-  PlugInIcon,
 } from "../icons/index";
 import { Percent, Store, CreditCard, TicketCheck } from 'lucide-react';
 
@@ -35,28 +32,29 @@ const navItems: NavItem[] = [
     subItems: [
       { name: "List", path: "/promo-management", pro: false },
       { name: "Usage History", path: "/usage-history/list", pro: false },
+      { name: "Merchant", path: "/merchant-management", pro: false },
+      { name: "BIN", path: "/bin-management", pro: false },
+      { name: "Eligibility Management", path: "/eligibility-management", pro: false },
     ],
   },
   {
-    name: "Merchant",
-    icon: <Store />,
-    path: "/merchant-management",
+    icon: <CreditCard />, // bisa pake icon lain biar beda
+    name: "Installment Management",
+    subItems: [
+      { name: "List", path: "/installment-management", pro: false },
+      { name: "Usage History", path: "/installment-usage-history/list", pro: false },
+      { name: "Merchant", path: "/installment-merchant-management", pro: false },
+      { name: "BIN", path: "/installment-bin-management", pro: false },
+    ],
   },
-  {
-    name: "BIN",
-    icon: <CreditCard />,
-    path: "/bin-management",
-  },
-  {
-    name: "Eligibility Management",
-    icon: <TicketCheck />,
-    path: "/eligibility-management",
-  }
 ];
+
+
+
 
 // Komponen Sidebar Utama
 const AppSidebar: React.FC = () => {
-  const { isExpanded, isMobileOpen, isHovered, setIsHovered } = useSidebar();
+  const { isExpanded, isMobileOpen, isHovered, setIsHovered, toggleSidebar } = useSidebar();
   const pathname = usePathname();
 
   const [openSubmenu, setOpenSubmenu] = useState<number | null>(null);
@@ -65,6 +63,9 @@ const AppSidebar: React.FC = () => {
 
   const isActive = useCallback((path: string) => path === pathname, [pathname]);
 
+  const closeSidebar = () => {
+  isExpanded && toggleSidebar();
+}
   // Efek untuk membuka submenu yang aktif berdasarkan path URL
   useEffect(() => {
     let submenuMatched = false;
@@ -137,6 +138,7 @@ const AppSidebar: React.FC = () => {
                 className={`menu-item group ${
                   isActive(nav.path) ? "menu-item-active" : "menu-item-inactive"
                 }`}
+                onClick={closeSidebar}
               >
                 <span className={`${isActive(nav.path) ? "menu-item-icon-active" : "menu-item-icon-inactive"}`}>
                   {nav.icon}
@@ -163,6 +165,7 @@ const AppSidebar: React.FC = () => {
                       className={`menu-dropdown-item ${
                         isActive(subItem.path) ? "menu-dropdown-item-active" : "menu-dropdown-item-inactive"
                       }`}
+                      onClick={closeSidebar}
                     >
                       {subItem.name}
                       {/* Badge 'new' atau 'pro' bisa ditambahkan di sini jika perlu */}
