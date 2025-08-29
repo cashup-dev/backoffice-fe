@@ -5,7 +5,7 @@ import { cookies } from 'next/headers';
 
 // const BASE_URL = 'https://promo-en.nephren.xyz';
 
-const BASE_URL = 'https://tucanos-dopleganger.cashlez.com/';
+const BASE_URL = 'https://seashell.cashlez.com/';
 
 // const BASE_URL = process.env.PROMO_ENGINE_API;
 
@@ -21,7 +21,7 @@ apiServer.interceptors.request.use(async (config) => {
 
   if (token) {
     config.headers.Authorization = `Bearer ${token}`;
-  } 
+  }
 
   return config;
 });
