@@ -1,21 +1,18 @@
+import { authOptions } from '@/lib/authOptions';
+import { getServerSession } from 'next-auth';
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
 
 export async function GET() {
-  const token = (await cookies()).get('token');
-  
-  if (!token) {
+  const session = await getServerSession(authOptions);
+
+  if (!session?.user) {
     return NextResponse.json(
-      { authenticated: false }, 
-      { status: 401 }
+      { authenticated: false },
+      { status: 401 },
     );
-  } else {
-    return NextResponse.json({ 
-      authenticated: true 
-    });
   }
 
-  return NextResponse.json({ 
-    authenticated: true 
+  return NextResponse.json({
+    authenticated: true,
   });
 }

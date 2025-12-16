@@ -1,7 +1,8 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { apiServer } from '../utils/apiServer'; // Adjust the path as needed
+import { createApiServer } from '../utils/apiServer'; // Adjust the path as needed
+import { useSession } from 'next-auth/react';
 
 type User = {
   id: number;
@@ -14,11 +15,14 @@ type User = {
 export default function UserList() {
   const [users, setUsers] = useState<User[]>([]);
   const [error, setError] = useState<string | null>(null);
+  const { data: session } = useSession();
 
   useEffect(() => {
     const fetchUsers = async () => {
+      if (!session?.accessToken) return;
       try {
-        const res = await apiServer.get('/user/list');
+        const client = createApiServer(session.accessToken);
+        const res = await client.get('/user/list');
         setUsers(res.data.data); // pastikan sesuai struktur: { data: [...] }
       } catch (err: any) {
         console.error('Fetch error:', err);
@@ -27,7 +31,7 @@ export default function UserList() {
     };
 
     fetchUsers();
-  }, []);
+  }, [session?.accessToken]);
 
   return (
     <div className="p-4 bg-white shadow rounded">

@@ -1,39 +1,41 @@
+import { authOptions } from '@/lib/authOptions';
 import { NextResponse } from 'next/server';
-import { cookies } from 'next/headers';
-import { UserData } from '@/types/auth';
-import { getUserDataFromToken } from '@/utils/auth';
+import { getServerSession } from 'next-auth';
 
 export async function GET() {
   try {
-    const cookieStore = cookies();
+    const session = await getServerSession(authOptions);
 
-    const tokenCookie = (await cookieStore).get('token');
-    
-    if (!tokenCookie) {
+    if (!session?.user) {
       return NextResponse.json(
         { message: 'Authentication token not found.' },
-        { status: 401 }
+        { status: 401 },
       );
     }
 
-    const token = tokenCookie.value;
+    const roles =
+      ((session as any)?.roles as string[] | undefined)?.map((role) => ({
+        authority: role,
+      })) ?? [];
 
-    const user: UserData | null = getUserDataFromToken(token);
+    const username =
+      (session as any)?.preferred_username ||
+      session.user.name ||
+      session.user.email ||
+      'User';
 
-    if (!user) {
-      return NextResponse.json(
-        { message: 'Invalid or malformed token.' },
-        { status: 401 }
-      );
-    }
-
-    return NextResponse.json({ user });
-
+    return NextResponse.json({
+      user: {
+        username,
+        id: session.user.email || session.user.name || username,
+        roles,
+      },
+    });
   } catch (error) {
     console.error('API /auth/me error:', error);
     return NextResponse.json(
       { message: 'Invalid or malformed token.' },
-      { status: 401 }
+      { status: 401 },
     );
   }
 }

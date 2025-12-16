@@ -1,6 +1,6 @@
 export interface TokenPayload {
   sub: string;
-  id: number;
+  id?: number | string;
   roles: Array<{ authority: string }>;
   iat: number;
   exp: number;
@@ -9,7 +9,7 @@ export interface TokenPayload {
 }
 
 export interface UserData {
-  id: number;
+  id?: number | string;
   username: string;
   roles: Array<{ authority: string }>;
   partnerId?: number;

@@ -1,36 +1,12 @@
 "use client";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { Dropdown } from "../ui/dropdown/Dropdown";
 import { DropdownItem } from "../ui/dropdown/DropdownItem";
-import { getCurrentUser } from "../../utils/auth";
+import { signOut, useSession } from "next-auth/react";
 
 export default function UserDropdown() {
   const [isOpen, setIsOpen] = useState(false);
-  const [user, setUser] = useState<{
-    id: number;
-    username: string;
-    partnerName?: string;
-    roles: Array<{ authority: string }>; // roles array
-  } | null>(null);
-
-  useEffect(() => {
-    const fetchUser = async () => {
-      const userData = await getCurrentUser();
-      if (userData) {
-        setUser({
-          id: userData.id,
-          username: userData.username,
-          roles: userData.roles.map(
-            (role: { authority: any }) => role.authority
-          ),
-          partnerName: userData.partnerName,
-        });
-      } else {
-        setUser(null);
-      }
-    };
-    fetchUser();
-  }, []);
+  const { data: session } = useSession();
 
   // console.log("User data:", user);
   function toggleDropdown(e: React.MouseEvent<HTMLButtonElement, MouseEvent>) {
@@ -43,12 +19,16 @@ export default function UserDropdown() {
   }
 
   const handleLogout = async () => {
-    await fetch("/api/auth/logout", {
-      method: "POST",
-    });
-
-    window.location.href = "/signin"; // Redirect ke halaman signin
+    await signOut({ callbackUrl: "/signin" });
   };
+
+  const username =
+    (session as any)?.preferred_username ||
+    session?.user?.name ||
+    session?.user?.email ||
+    "User";
+
+  const roles = ((session as any)?.roles as string[] | undefined) ?? [];
 
   return (
     <div className="relative">
@@ -66,7 +46,7 @@ export default function UserDropdown() {
         </span> */}
 
         <span className="block mr-1 font-medium text-theme-sm">
-          Hi, {user?.username}!
+          Hi, {username}!
         </span>
 
         <svg
@@ -96,19 +76,14 @@ export default function UserDropdown() {
       >
         <div>
           <span className="block font-medium text-gray-700 text-theme-sm dark:text-gray-400">
-            {user?.username || "Random User"}
+            {username}
           </span>
           <span className="mt-0.5  text-theme-xs text-gray-500 dark:text-gray-400 flex ">
             <p className="lowercase">
-              {typeof user?.roles?.[0] === "string"
-              ? user.roles[0]
-              : user?.roles?.[0]?.authority || "User Role"}
+              {roles?.[0] || "User Role"}
             </p>
             <span className="mx-1">|</span>
-            <p>
-              {user?.partnerName ? `${user.partnerName}` : ""}
-            </p>
-            
+            <p>{session?.user?.email || ""}</p>
           </span>
         </div>
 

@@ -1,44 +1,30 @@
 "use client";
 import Checkbox from "@/components/form/input/Checkbox";
-import Input from "@/components/form/input/InputField";
 import Label from "@/components/form/Label";
 import Button from "@/components/ui/button/Button";
-import { ChevronLeftIcon, EyeCloseIcon, EyeIcon } from "@/icons";
-import Link from "next/link";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import { signIn, useSession } from "next-auth/react";
+import React, { useEffect, useState } from "react";
 import { toast } from "sonner"; // ✅ sonner import
 
 export default function SignInForm() {
   const router = useRouter();
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false);
+  const { status } = useSession();
   const [isChecked, setIsChecked] = useState(false);
   const [isLoading, setIsLoading] = useState(false); // ✅ loading state
+
+  useEffect(() => {
+    if (status === "authenticated") {
+      router.replace("/");
+    }
+  }, [status, router]);
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
-    const toastId = toast.loading("Logging in...");
+    toast.loading("Redirecting to Keycloak...");
 
-    const res = await fetch('/api/auth/login', {
-      method: 'POST',
-      body: JSON.stringify({ username, password }),
-      headers: {
-        'Content-Type': 'application/json',
-      },
-    });
-
-    toast.dismiss(toastId);
-
-    if (res.ok) {
-      toast.success("Login berhasil!");
-      window.location.href = '/'; // force reload untuk ambil cookie
-    } else {
-      toast.error("Login gagal. Cek kembali username & password.");
-      setIsLoading(false);
-    }
+    await signIn("keycloak", { callbackUrl: "/" });
   };
 
   return (
@@ -59,45 +45,20 @@ export default function SignInForm() {
               Sign In
             </h1>
             <p className="text-sm text-gray-500 dark:text-gray-400">
-              Enter your username and password to sign in!
+              Autentikasi menggunakan Keycloak realm{" "}
+              <span className="font-semibold">cashup-dev</span>.
             </p>
           </div>
 
           <form onSubmit={handleLogin}>
             <div className="space-y-6">
               <div>
-                <Label>
-                  Username <span className="text-error-500">*</span>
-                </Label>
-                <Input
-                  placeholder="Enter your username"
-                  value={username}
-                  onChange={(e) => setUsername(e.target.value)}
-                  type="text"
-                />
-              </div>
-              <div>
-                <Label>
-                  Password <span className="text-error-500">*</span>
-                </Label>
-                <div className="relative">
-                  <Input
-                    type={showPassword ? "text" : "password"}
-                    placeholder="Enter your password"
-                    value={password}
-                    onChange={(e) => setPassword(e.target.value)}
-                  />
-                  <span
-                    onClick={() => setShowPassword(!showPassword)}
-                    className="absolute z-30 -translate-y-1/2 cursor-pointer right-4 top-1/2"
-                  >
-                    {showPassword ? (
-                      <EyeIcon className="fill-gray-500 dark:fill-gray-400" />
-                    ) : (
-                      <EyeCloseIcon className="fill-gray-500 dark:fill-gray-400" />
-                    )}
-                  </span>
-                </div>
+                <Label>Masuk dengan Keycloak</Label>
+                <p className="text-sm text-gray-500 dark:text-gray-400">
+                  Kamu akan diarahkan ke halaman login Keycloak untuk realm
+                  <span className="font-semibold"> cashup-dev</span>. Pastikan
+                  sudah memiliki akun & akses ke client yang sesuai.
+                </p>
               </div>
               <div className="flex items-center justify-between">
                 <div className="flex items-center gap-3">
@@ -118,7 +79,7 @@ export default function SignInForm() {
                   className="w-full"
                   size="sm"
                   type="submit"
-                  disabled={isLoading}
+                  disabled={isLoading || status === "loading"}
                 >
                   {isLoading ? (
                     <span className="flex items-center justify-center gap-2">
@@ -145,7 +106,7 @@ export default function SignInForm() {
                       Logging in...
                     </span>
                   ) : (
-                    "Sign in"
+                    "Sign in with Keycloak"
                   )}
                 </Button>
               </div>

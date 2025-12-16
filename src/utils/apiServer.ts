@@ -1,8 +1,4 @@
 import axios from 'axios';
-import { cookies } from 'next/headers';
-
-// const BASE_URL = 'http://localhost:8800';
-// const BASE_URL = 'https://your-backoffice-api.example.com';
 
 const BASE_URL = process.env.BACKOFFICE_API;
 
@@ -13,12 +9,14 @@ export const apiServer = axios.create({
   },
 });
 
-apiServer.interceptors.request.use(async (config) => {
-  const token = (await cookies()).get('token')?.value;
+export const createApiServer = (accessToken?: string) => {
+  const instance = axios.create({
+    baseURL: BASE_URL,
+    headers: {
+      'Content-Type': 'application/json',
+      ...(accessToken ? { Authorization: `Bearer ${accessToken}` } : {}),
+    },
+  });
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
-
-  return config;
-});
+  return instance;
+};

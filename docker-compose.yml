@@ -1,0 +1,16 @@
+version: "3.8"
+
+services:
+  nextjs:
+    container_name: nextjs_backoffice
+    build:
+      context: .
+      args:
+        NODE_ENV: production
+        # JWT_SECRET: ${JWT_SECRET}
+        # PROMO_ENGINE_API: ${PROMO_ENGINE_API}
+    env_file:
+      - .env.production
+    ports:
+      - "3001:3000"
+    restart: unless-stopped
