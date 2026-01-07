@@ -1,27 +1,35 @@
 import type { Metadata } from "next";
-import { EcommerceMetrics } from "@/components/ecommerce/EcommerceMetrics";
 import React from "react";
-import StatisticsChart from "@/components/ecommerce/StatisticsChart";
-import RecentOrders from "@/components/ecommerce/RecentOrders";
+import WelcomeBanner from "@/components/dashboard/WelcomeBanner";
+import TransactionCards from "@/components/dashboard/TransactionCards";
+import MonthlyTransactionsChart from "@/components/dashboard/MonthlyTransactionsChart";
+import TransactionStatistics from "@/components/dashboard/TransactionStatistics";
 
 export const metadata: Metadata = {
-  title:
-    "Backoffice casUP",
-  description: "cashUP",
+  title: "Dashboard - Backoffice cashUP",
+  description: "cashUP Backoffice Dashboard",
 };
 
-export default function Ecommerce() {
+export default function Dashboard() {
   return (
-    <div className="grid grid-cols-12 gap-4 md:gap-6">
-      <div className="col-span-12 xl:col-span-6 space-y-6">
-        <EcommerceMetrics />
-      </div>
-      <div className="col-span-12 xl:col-span-6 space-y-6">
-        <RecentOrders />
-      </div>
+    <div className="space-y-4 md:space-y-6">
+      {/* Welcome Banner */}
+      <WelcomeBanner userName="admin2" />
 
-      <div className="col-span-12">
-        <StatisticsChart />
+      {/* Transaction Cards */}
+      <TransactionCards />
+
+      {/* Main Content Grid */}
+      <div className="grid grid-cols-1 xl:grid-cols-3 gap-4 md:gap-6">
+        {/* Monthly Transactions Chart - Takes 2 columns on xl screens */}
+        <div className="xl:col-span-2">
+          <MonthlyTransactionsChart />
+        </div>
+
+        {/* Transaction Statistics - Takes 1 column on xl screens */}
+        <div className="xl:col-span-1">
+          <TransactionStatistics />
+        </div>
       </div>
     </div>
   );

@@ -5,7 +5,7 @@ import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { useSidebar } from "../context/SidebarContext";
 import { ChevronDownIcon, GridIcon, HorizontaLDots } from "../icons/index";
-import { Store } from "lucide-react";
+import { Store, Users, Calendar, FileText, CreditCard } from "lucide-react";
 
 // Tipe untuk item navigasi
 type NavItem = {
@@ -23,9 +23,32 @@ const navItems: NavItem[] = [
     path: "/",
   },
   {
-    name: "Products",
-    icon: <Store />,
-    path: "/products",
+    name: "Merchant",
+    icon: <Store className="w-5 h-5" />,
+    subItems: [
+      { name: "Merchants", path: "/merchants" },
+      { name: "Partners", path: "/partners" },
+    ],
+  },
+  {
+    name: "Event",
+    icon: <Calendar className="w-5 h-5" />,
+    subItems: [
+      { name: "Events", path: "/events" },
+    ],
+  },
+  {
+    name: "Docsite",
+    icon: <FileText className="w-5 h-5" />,
+    subItems: [
+      { name: "Post", path: "/post" },
+      { name: "Category", path: "/category" },
+    ],
+  },
+  {
+    name: "Transactions",
+    icon: <CreditCard className="w-5 h-5" />,
+    path: "/transactions",
   },
 ];
 

@@ -4,11 +4,22 @@ import { useSidebar } from "@/context/SidebarContext";
 import Image from "next/image";
 import Link from "next/link";
 import React, { useState, useEffect, useRef } from "react";
+import { ChatBubbleLeftRightIcon } from "@heroicons/react/24/outline";
 
 const AppHeader: React.FC = () => {
   const [isApplicationMenuOpen, setApplicationMenuOpen] = useState(false);
+  const [currentDateTime, setCurrentDateTime] = useState(new Date());
 
   const { isMobileOpen, toggleSidebar, toggleMobileSidebar } = useSidebar();
+
+  // Update date and time every second
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentDateTime(new Date());
+    }, 1000);
+
+    return () => clearInterval(timer);
+  }, []);
 
   const handleToggle = () => {
     if (window.innerWidth >= 1024) {
@@ -37,6 +48,25 @@ const AppHeader: React.FC = () => {
       document.removeEventListener("keydown", handleKeyDown);
     };
   }, []);
+
+  // Format date and time
+  const formatDate = (date: Date) => {
+    return date.toLocaleDateString('en-US', {
+      weekday: 'long',
+      day: '2-digit',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  const formatTime = (date: Date) => {
+    return date.toLocaleTimeString('en-US', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: false
+    }) + ' WIB';
+  };
 
   return (
     <header className="sticky top-0 flex w-full bg-white border-gray-200 z-99999 dark:border-gray-800 dark:bg-gray-900 lg:border-b">
@@ -164,13 +194,22 @@ const AppHeader: React.FC = () => {
             isApplicationMenuOpen ? "flex" : "hidden"
           } items-center justify-between w-full gap-4 px-5 py-4 lg:flex shadow-theme-md lg:justify-end lg:px-0 lg:shadow-none`}
         >
-          <div className="flex items-center gap-2 2xsm:gap-3">
-            {/* <!-- Dark Mode Toggler --> */}
-            {/* <ThemeToggleButton /> */}
-            {/* <!-- Dark Mode Toggler --> */}
+          {/* Date and Time Display */}
+          <div className="hidden lg:flex flex-col items-end mr-4">
+            <span className="text-sm font-semibold text-gray-900 dark:text-white">
+              {formatDate(currentDateTime)}
+            </span>
+            <span className="text-xs text-gray-500 dark:text-gray-400">
+              {formatTime(currentDateTime)}
+            </span>
+          </div>
 
-            {/* <NotificationDropdown />  */}
-            {/* <!-- Notification Menu Area --> */}
+          <div className="flex items-center gap-2 2xsm:gap-3">
+            {/* Message/Chat Icon */}
+            <button className="relative flex items-center justify-center w-10 h-10 text-gray-500 hover:bg-gray-100 rounded-lg dark:text-gray-400 dark:hover:bg-gray-800 transition-colors">
+              <ChatBubbleLeftRightIcon className="w-6 h-6" />
+              <span className="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full"></span>
+            </button>
           </div>
           {/* <!-- User Area --> */}
           <UserDropdown />
